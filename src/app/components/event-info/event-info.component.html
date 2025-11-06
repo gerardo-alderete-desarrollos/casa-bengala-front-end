@@ -1,0 +1,52 @@
+<section class="event-info" id="info">
+  <div class="container">
+    <h2 class="section-title">Información del Evento</h2>
+    <p class="section-subtitle">Descubre todo lo que tenemos preparado para ti</p>
+    
+    <div class="info-grid">
+      <div 
+        class="info-card" 
+        *ngFor="let card of infoCards"
+        [@slideInLeft]="card.state">
+        <div class="card-icon">{{ card.icon }}</div>
+        <h3 class="card-title">{{ card.title }}</h3>
+        <p class="card-description">{{ card.description }}</p>
+      </div>
+    </div>
+    
+    <div class="event-details">
+      <div class="detail-box">
+        <h3>¿Qué incluye?</h3>
+        <ul>
+          <li>✓ Acceso a todas las conferencias</li>
+          <li>✓ Material exclusivo del evento</li>
+          <li>✓ Coffee break y almuerzo</li>
+          <li>✓ Certificado de participación</li>
+          <li>✓ Networking con expertos</li>
+        </ul>
+      </div>
+      
+      <div class="detail-box highlight">
+        <h3>Horario</h3>
+        <div class="schedule">
+          <div class="schedule-item">
+            <span class="time">09:00</span>
+            <span class="activity">Registro</span>
+          </div>
+          <div class="schedule-item">
+            <span class="time">10:00</span>
+            <span class="activity">Conferencia inaugural</span>
+          </div>
+          <div class="schedule-item">
+            <span class="time">14:00</span>
+            <span class="activity">Talleres prácticos</span>
+          </div>
+          <div class="schedule-item">
+            <span class="time">18:00</span>
+            <span class="activity">Cierre y networking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

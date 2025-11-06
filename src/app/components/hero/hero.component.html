@@ -1,0 +1,20 @@
+<section class="hero" [@fadeInUp]="animationState">
+  <div class="hero-background">
+    <div class="gradient-overlay"></div>
+    <div class="particles">
+      <div class="particle" *ngFor="let p of [1,2,3,4,5,6,7,8,9,10]"></div>
+    </div>
+  </div>
+  
+  <div class="hero-content">
+    <h1 class="hero-title">
+      <span class="glitch" data-text="EVENTO EXCLUSIVO">EVENTO EXCLUSIVO</span>
+    </h1>
+    <p class="hero-subtitle">Una experiencia única te espera</p>
+    <div class="hero-date">15 de Diciembre, 2025</div>
+    <button class="cta-button" (click)="scrollToRegistration()">
+      Regístrate Ahora
+      <span class="button-shine"></span>
+    </button>
+  </div>
+</section>

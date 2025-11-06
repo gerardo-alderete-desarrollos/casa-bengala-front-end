@@ -1,0 +1,59 @@
+<section class="registrations-list" id="participants" [@fadeInUp]="animationState">
+  <div class="container">
+    <h2 class="section-title">Participantes Registrados</h2>
+    <p class="section-subtitle">Únete a estos increíbles profesionales</p>
+    
+    <!-- Loader -->
+    <div class="loader-container" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Cargando participantes...</p>
+    </div>
+    
+    <!-- Error -->
+    <div class="error-container" *ngIf="hasError && !isLoading">
+      <div class="error-icon">⚠️</div>
+      <h3>No se pudieron cargar los registros</h3>
+      <button class="retry-button" (click)="loadRegistrations()">
+        Intentar nuevamente
+      </button>
+    </div>
+    
+    <!-- Lista de registros -->
+    <div class="registrations-grid" *ngIf="!isLoading && !hasError">
+      <div class="registration-card" 
+           *ngFor="let registration of registrations; let i = index"
+           [style.animation-delay]="i * 0.1 + 's'">
+        <div class="card-header">
+          <div class="avatar" [style.background]="getRandomColor(i)">
+            {{ getInitials(registration.name) }}
+          </div>
+          <div class="user-info">
+            <h3 class="user-name">{{ registration.name }}</h3>
+            <p class="user-email">{{ registration.email }}</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="user-message">{{ registration.message }}</p>
+        </div>
+        <div class="card-footer">
+          <span class="badge">Participante #{{ registration.id }}</span>
+        </div>
+      </div>
+      
+      <!-- Mensaje cuando no hay registros -->
+      <div class="empty-state" *ngIf="registrations.length === 0">
+        <div class="empty-icon">📋</div>
+        <h3>Aún no hay registros</h3>
+        <p>Sé el primero en registrarte para este increíble evento</p>
+      </div>
+    </div>
+    
+    <!-- Contador de participantes -->
+    <div class="participants-count" *ngIf="registrations.length > 0 && !isLoading">
+      <div class="count-box">
+        <span class="count-number">{{ registrations.length }}</span>
+        <span class="count-label">Participantes Registrados</span>
+      </div>
+    </div>
+  </div>
+</section>

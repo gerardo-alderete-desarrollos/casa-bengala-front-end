@@ -1,0 +1,85 @@
+<section class="registration" id="registration">
+  <div class="container">
+    <h2 class="section-title">Registro</h2>
+    <p class="section-subtitle">¡Asegura tu lugar ahora!</p>
+    
+    <div class="timer-container" [class.warning]="timeLeft < 60" [class.expired]="formExpired">
+      <div class="timer-icon">⏰</div>
+      <div class="timer-content">
+        <div class="timer-label">Tiempo restante para registro:</div>
+        <div class="timer-display" *ngIf="!formExpired">{{ formattedTime }}</div>
+        <div class="timer-expired" *ngIf="formExpired">¡Tiempo expirado!</div>
+      </div>
+    </div>
+    
+    <div class="form-container" *ngIf="!formExpired">
+      <div class="success-message" *ngIf="showSuccess">
+        <div class="success-icon">✓</div>
+        <h3>¡Registro Exitoso!</h3>
+        <p>Hemos recibido tu registro. Te enviaremos más información por email.</p>
+      </div>
+      
+      <div class="error-message" *ngIf="showError">
+        <div class="error-icon">✗</div>
+        <p>{{ errorMessage }}</p>
+      </div>
+      
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
+        <div class="form-group">
+          <label for="name">Nombre Completo *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name"
+            placeholder="Ingresa tu nombre completo"
+            [class.error]="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched">
+          <span class="error-text" *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched">
+            {{ getFieldError('name') }}
+          </span>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email"
+            placeholder="tu@email.com"
+            [class.error]="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">
+          <span class="error-text" *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">
+            {{ getFieldError('email') }}
+          </span>
+        </div>
+        
+        <div class="form-group">
+          <label for="message">¿Por qué quieres asistir? *</label>
+          <textarea 
+            id="message" 
+            formControlName="message"
+            rows="5"
+            placeholder="Cuéntanos por qué te interesa este evento..."
+            [class.error]="registrationForm.get('message')?.invalid && registrationForm.get('message')?.touched"></textarea>
+          <span class="error-text" *ngIf="registrationForm.get('message')?.invalid && registrationForm.get('message')?.touched">
+            {{ getFieldError('message') }}
+          </span>
+        </div>
+        
+        <button 
+          type="submit" 
+          class="submit-button"
+          [disabled]="registrationForm.invalid || isSubmitting"
+          [class.loading]="isSubmitting">
+          <span *ngIf="!isSubmitting">Confirmar Registro</span>
+          <span *ngIf="isSubmitting" class="loader"></span>
+        </button>
+      </form>
+    </div>
+    
+    <div class="expired-container" *ngIf="formExpired">
+      <div class="expired-icon">⏱️</div>
+      <h3>El tiempo de registro ha expirado</h3>
+      <p>Lo sentimos, el formulario de registro ya no está disponible.</p>
+      <button class="retry-button" (click)="resetTimer()">Reiniciar Temporizador</button>
+    </div>
+  </div>
+</section>
