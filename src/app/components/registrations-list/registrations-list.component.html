@@ -1,5 +1,13 @@
 <section class="registrations-list" id="participants" [@fadeInUp]="animationState">
   <div class="container">
+    <!-- Notificación de nuevo registro -->
+    <div class="new-registration-notification" *ngIf="showNewItemNotification" [@newItemAnimation]>
+      <div class="notification-content">
+        <span class="notification-icon">🎉</span>
+        <span class="notification-text">¡Nuevo participante registrado!</span>
+      </div>
+    </div>
+    
     <h2 class="section-title">Participantes Registrados</h2>
     <p class="section-subtitle">Únete a estos increíbles profesionales</p>
     
@@ -22,6 +30,7 @@
     <div class="registrations-grid" *ngIf="!isLoading && !hasError">
       <div class="registration-card" 
            *ngFor="let registration of registrations; let i = index"
+           [@newItemAnimation]
            [style.animation-delay]="i * 0.1 + 's'">
         <div class="card-header">
           <div class="avatar" [style.background]="getRandomColor(i)">

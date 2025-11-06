@@ -1,6 +1,7 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { RegistrationService, Registration } from 'src/app/services/registration.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-registrations-list',
@@ -11,24 +12,50 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
       state('hidden', style({ opacity: 0, transform: 'translateY(50px)' })),
       state('visible', style({ opacity: 1, transform: 'translateY(0)' })),
       transition('hidden => visible', animate('600ms ease-out'))
+    ]),
+    trigger('newItemAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.8) translateY(-20px)' }),
+        animate('500ms ease-out', style({ opacity: 1, transform: 'scale(1) translateY(0)' }))
+      ])
     ])
   ]
 })
-export class RegistrationsListComponent implements OnInit {
+export class RegistrationsListComponent implements OnInit, OnDestroy {
   registrations: Registration[] = [];
   isLoading = true;
   hasError = false;
   animationState = 'hidden';
+  showNewItemNotification = false;
+  
+  private registrationSubscription?: Subscription;
 
   constructor(private registrationService: RegistrationService) {}
 
   ngOnInit() {
     this.loadRegistrations();
     this.checkScroll();
+    
+    // Suscribirse a nuevos registros
+    this.registrationSubscription = this.registrationService
+      .onRegistrationCreated()
+      .subscribe(() => {
+        this.loadRegistrations(true);
+        this.showNewRegistrationNotification();
+      });
   }
 
-  loadRegistrations() {
-    this.isLoading = true;
+  ngOnDestroy() {
+    // Limpiar suscripción
+    if (this.registrationSubscription) {
+      this.registrationSubscription.unsubscribe();
+    }
+  }
+
+  loadRegistrations(isRefresh = false) {
+    if (!isRefresh) {
+      this.isLoading = true;
+    }
     this.hasError = false;
     
     this.registrationService.getRegistrations().subscribe({
@@ -42,6 +69,23 @@ export class RegistrationsListComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  showNewRegistrationNotification() {
+    this.showNewItemNotification = true;
+    
+    // Ocultar notificación después de 3 segundos
+    setTimeout(() => {
+      this.showNewItemNotification = false;
+    }, 3000);
+    
+    // Scroll suave hacia la sección
+    setTimeout(() => {
+      const element = document.getElementById('participants');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 500);
   }
 
   @HostListener('window:scroll', [])
